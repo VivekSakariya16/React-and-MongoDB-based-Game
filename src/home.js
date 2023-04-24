@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import Game from "./game";
 import Button from "./button";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -8,16 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 const HomeStyled = styled.main`
   background-image: radial-gradient(circle at top, #13366c 20%, #131537 100%);
-  color: white;
   font-family: "Barlow Semi Condensed", sans-serif;
+  width: 100vw;
 
   body {
     display: flex;
-    align-items: center;
     justify-content: center;
     overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
     color: #13366c;
     background-color: #7e57c2;
   }
@@ -86,20 +83,38 @@ const HomeStyled = styled.main`
     flex-direction: column;
     justify-content: space-between;
   }
+
+  .start-button:hover {
+    color: #13366c;
+  }
   .start-button {
     position: fixed;
-    top: 40%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     margin: auto;
+    color: #fff;
     font-size: 24px;
     padding: 16px 32px;
   }
+
+  .show{
+    position: fixed;
+    bottom: 3%;
+    right: 13%;
+    color: #fff;
+  }
+  .show:hover {
+    color: #13366c;
+  }
+
   .h1 {
+    top: 30%;
+    left: 50%;
     font-size: 50 px;
     line-height: 1.2;
     font-weight: 700;
-    margin: 0 auto;
+    margin: auto;
     text-transform: uppercase;
     text-align: center;
   }
@@ -119,6 +134,8 @@ const HomeStyled = styled.main`
   .scoreboard h1 {
     font-size: 40px;
     text-align: center;
+    color: #fff;
+    padding-bottom: 15px;
   }
 
   .scoreboard table {
@@ -138,6 +155,7 @@ const HomeStyled = styled.main`
     text-align: center;
     border: 2px solid white;
     font-size: 20px;
+    color: #fff;
   }
 
   .scoreboard td:first-child {
@@ -154,78 +172,65 @@ const HomeStyled = styled.main`
 `;
 
 function Home() {
-  // const [gameStarted, setGameStarted] = useState(false);
-  const [name, setName] = useState("");
-  const host = "http://localhost:8000";
+  const host = "http://localhost:8080";
   const [scores, setScores] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchScores() {
-      const response = await axios.get(host+'/get-scores');
+      const response = await axios.get(host + '/get-scores');
       setScores(response.data);
     }
     fetchScores();
   }, []);
 
   function handleClick() {
-    if (name) {
-      localStorage.setItem("name", name);
-      // setGameStarted(true);
-      navigate("/play");
-    } else {
-      alert("Please enter your name");
-    }
+    navigate("/play");
   }
-  
+  function all() {
+    navigate("/allrecord");
+  }
+
 
   return (
     <HomeStyled>
       <div className="app-content">
-        {(
-          <>
-            <div class="Wrapper">
-              <h1 class="Title">Welcome to Rock-Paper-Scissor!</h1>
-              <div class="Input">
-                <input type="text" id="input" class="Input-text" placeholder="Enter Your Name"
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <div className="start-button">
-              <Button onClick={handleClick} className="start-button">
-                <b>Start!</b>
-              </Button>
-            </div>
-            <div class="scoreboard">
-              <h1>Scoreboard</h1>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Rank</th>
-                      <th>Name</th>
-                      <th>Score</th>
-                    </tr>
-                  </thead>
-                
-                  {scores.map((score,i) => (
-                    <>
-                    <tbody>
-                    <tr>
-                      <td>{i+1}</td>
-                      <td>{score.name}</td>
-                      <td>{score.score}</td>
-                    </tr>
-                    <tr></tr>
-                  </tbody>
-                    </>
-                  ))}
-                
-              </table>
-            </div>
-          </>
-        )}
+        <div class="Wrapper">
+          <h1 class="Title">Welcome to Rock-Paper-Scissor!</h1>
+        </div>
+        <div className="start-button">
+          <Button onClick={handleClick} className="start-button">
+            <b>Start!</b>
+          </Button>
+        </div>
+        <div class="scoreboard">
+          <h1>Scoreboard</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+
+            {scores.filter((score) => score.name === localStorage.getItem("username")).map((score, i) => (
+              <>
+                <tbody>
+                  <tr>
+                    <td>{i + 1}</td>
+                    <td>{score.name}</td>
+                    <td>{score.score}</td>
+                  </tr>
+                  <tr></tr>
+                </tbody>
+              </>
+            ))}
+          </table>
+        </div>
+        <div className="show">
+          <Button onClick={() => all()}>show more></Button>
+        </div>
       </div>
     </HomeStyled>
   );

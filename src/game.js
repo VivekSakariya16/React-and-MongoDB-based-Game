@@ -6,14 +6,15 @@ import styled from "styled-components";
 import Wrapper from "./wrapper";
 import Table from "./table";
 import Rules from "./rules";
-// import Endgame from "./endgame";
+import moment from 'moment-timezone';
 import Button from './button'
 
 const GameStyled = styled.main`
   background-image: radial-gradient(circle at top, #13366c 20%, #131537 100%);
   color: white;
   font-family: "Barlow Semi Condensed", sans-serif;
-
+  width: 100vw;
+  
   .Game-content {
     padding: 2em;
     min-height: 100vh;
@@ -101,10 +102,14 @@ export const ScoreContext = createContext();
 export function Game() {
   const navigate = useNavigate();
   const [score, setScore] = useState(0);
-  const host = "http://localhost:8000";
+  const host = "http://localhost:8080";
+  var username = localStorage.getItem("username");
+  const date = new Date();
+  const result = moment.tz(date, "Asia/Kolkata").format('YYYY-MM-DD HH:mm:ss');
 
   const endgame = async() => {
     console.log(score);
+    if(!username){username = "Anonymous"}
       await fetch(host + "/add-score", {
       method: "POST",
       headers: {
@@ -112,14 +117,14 @@ export function Game() {
       },
       body: JSON.stringify({
         score: score,
-        name: localStorage.getItem("name"),
+        name: username,
+        date: result,
       }),
-    }).then( () =>
-      navigate('/home')
+    }).then( () =>{
+      console.log(username);
+      navigate('/home')}
     )
     console.log("Game Ended");
-    // alert("Game Ended");
-    // window.location.reload();
   }
   return (
     <ScoreContext.Provider

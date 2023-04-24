@@ -18,9 +18,8 @@ const ScoreStyled = styled.div`
   p {
     color: #565468;
     font-size: 40px;
-    margin: 0;
     font-weight: 700;
-    position: relative;
+    position: center;
   }
   @media screen and (min-width: 768px) {
     padding: 10px 20px;
