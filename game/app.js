@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-const DB = 'mongodb+srv://vivek:9023490537@cluster0.vdrvb7z.mongodb.net/?retryWrites=true&w=majority'
+const DB = 'mongodb+srv://@cluster0.vdrvb7z.mongodb.net/?retryWrites=true&w=majority'
 const connectToDatabase = () => {
     mongoose.connect(DB, {
         useNewUrlParser: true,
@@ -34,16 +34,16 @@ let transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: 'vivek.sce20@sot.pdpu.ac.in',
-        pass: 'Vivek!534$'
+        user: '',
+        pass: ''
     }
 });
 
 //minute hour day month dayOfWeek
 cron.schedule('38 18 * * *', () => {
     let mailOptions = {
-        from: 'vivek.sce20@sot.pdpu.ac.in',
-        to: 'manav.ukani@rediffmail.com',
+        from: '',
+        to: '',
         subject: 'Rock Paper Scissor Game - Top 5',
         html: '<h1>Hey there!</h1><p>Congratulations, you made it to the top 5 leaderboard in last day in Rock Paper Scissor game.</p><h1>We have a reward for your achievement!</h1><p>Here is a 10% gift coupon of your favourite store </p><img src="https://firebasestorage.googleapis.com/v0/b/bcd-predicter.appspot.com/o/image.jpeg?alt=media&token=b85a53c2-fded-4196-961b-e939b4cba42e" alt="Gift Voucher" width="200" height="100">'
     };
